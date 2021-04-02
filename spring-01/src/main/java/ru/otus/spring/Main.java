@@ -12,11 +12,11 @@ public class Main {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("/spring-context.xml");
         QuestionService service = context.getBean(QuestionService.class);
         List<Question> questions = service.getAll();
-        for (Question question:questions) {
+        for (Question question : questions) {
             System.out.println(question.getQuestion());
             if (!question.getAnswers().isEmpty()) {
                 System.out.println("Answer options:");
-                for (String answer: question.getAnswers()) {
+                for (String answer : question.getAnswers()) {
                     System.out.println("  " + answer);
                 }
             }
