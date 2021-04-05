@@ -24,7 +24,7 @@ public class QuestionDaoCsv implements QuestionDao {
         this.csvPath = csvPath;
     }
 
-    public List<Question> findAll() {
+    public List<Question> findAll() throws IOException {
         List<Question> questions = new ArrayList<>();
         try {
             InputStream inputStream = new ClassPathResource(csvPath).getInputStream();
@@ -41,7 +41,7 @@ public class QuestionDaoCsv implements QuestionDao {
             }
 
         } catch (IOException e) {
-            e.printStackTrace();
+            throw e;
         }
         return questions;
     }
