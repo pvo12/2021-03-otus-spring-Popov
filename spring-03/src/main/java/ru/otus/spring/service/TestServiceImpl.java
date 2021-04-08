@@ -3,6 +3,7 @@ package ru.otus.spring.service;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.dao.QuestionDao;
+import ru.otus.spring.dao.QuestionLoadingException;
 import ru.otus.spring.domain.Question;
 
 import java.io.IOException;
@@ -22,34 +23,44 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public Boolean test() throws IOException {
-        Boolean result = false;
-        inOutService.println("Enter your firstname and lastname");
-        inOutService.nextLine();
+    public void test() throws QuestionLoadingException {
+        String userName = getUserName();
         int countAnswer = 0;
 
         List<Question> questions = dao.findAll();
         for (Question question : questions) {
-            inOutService.println(question.getQuestion());
-            if (!question.getAnswers().isEmpty()) {
-                inOutService.println("Answer options:");
-                for (String answer : question.getAnswers()) {
-                    inOutService.println("  " + answer);
-                }
-            }
-            String answer = inOutService.nextLine();
+            String answer = getAnswer(question);
             if (answer.equals(question.getAnswer())) {
                 countAnswer++;
             }
             inOutService.println();
         }
-
-        if (countAnswer >= limit) {
-            inOutService.println("Test passed");
-            result = true;
-        } else {
-            inOutService.println("Test failed");
-        }
-        return result;
+        printResult(userName, countAnswer);
     }
+
+    private void printResult(String userName, int countAnswer) {
+        if (countAnswer >= limit) {
+            inOutService.println(userName + ": Test passed");
+        } else {
+            inOutService.println(userName + ": Test failed");
+        }
+    }
+
+    private String getAnswer(Question question) {
+        inOutService.println(question.getQuestion());
+        if (!question.getAnswers().isEmpty()) {
+            inOutService.println("Answer options:");
+            for (String answer : question.getAnswers()) {
+                inOutService.println("  " + answer);
+            }
+        }
+        return inOutService.nextLine();
+    }
+
+    private String getUserName() {
+        inOutService.println("Enter your firstname and lastname");
+        return inOutService.nextLine();
+    }
+
+
 }

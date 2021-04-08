@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface QuestionDao {
 
-    List<Question> findAll() throws IOException;
+    List<Question> findAll() throws QuestionLoadingException;
 }

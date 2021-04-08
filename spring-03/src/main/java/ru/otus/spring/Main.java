@@ -4,6 +4,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import ru.otus.spring.dao.QuestionLoadingException;
 import ru.otus.spring.domain.Question;
 import ru.otus.spring.service.TestService;
 
@@ -18,7 +19,7 @@ import java.util.stream.Stream;
 @ComponentScan
 public class Main {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws QuestionLoadingException {
         AnnotationConfigApplicationContext context =
                 new AnnotationConfigApplicationContext(Main.class);
 
