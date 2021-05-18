@@ -7,3 +7,5 @@ Spring Framework для Diasoft
   /spring-01
 3. Конфигурирование Spring-приложений 
   /spring-03
+4. Unit-тестирование
+  /spring-04
