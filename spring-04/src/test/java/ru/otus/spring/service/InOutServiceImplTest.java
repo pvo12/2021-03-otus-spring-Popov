@@ -18,7 +18,7 @@ class InOutServiceImplTest {
     @Mock
     private InputStream inputStream;
     @Mock
-    PrintStream printStream;
+    private PrintStream printStream;
     @InjectMocks
     private InOutServiceImpl inOutService;
 

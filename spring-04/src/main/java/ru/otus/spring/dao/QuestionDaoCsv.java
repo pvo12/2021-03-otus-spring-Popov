@@ -1,8 +1,10 @@
 package ru.otus.spring.dao;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
+import ru.otus.spring.config.Config;
 import ru.otus.spring.domain.Question;
 
 import java.io.BufferedReader;
@@ -15,19 +17,14 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class QuestionDaoCsv implements QuestionDao {
-
-    private final String csvPath;
-
-
-    public QuestionDaoCsv(@Value("${csv.path}") String csvPath) {
-        this.csvPath = csvPath;
-    }
+    private final Config config;
 
     public List<Question> findAll() throws QuestionLoadingException {
         List<Question> questions = new ArrayList<>();
         try {
-            InputStream inputStream = new ClassPathResource(csvPath).getInputStream();
+            InputStream inputStream = new ClassPathResource(config.getCsvPath()).getInputStream();
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
             String line;
             while ((line = reader.readLine()) != null) {

@@ -9,3 +9,5 @@ Spring Framework для Diasoft
   /spring-03
 4. Unit-тестирование
   /spring-04
+5. "Чёрная магия" Spring Boot
+  /spring-04
