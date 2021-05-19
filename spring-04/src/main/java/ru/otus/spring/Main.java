@@ -8,9 +8,7 @@ import ru.otus.spring.service.TestService;
 
 @SpringBootApplication
 public class Main {
-	public static void main(String[] args) throws QuestionLoadingException {
-		ConfigurableApplicationContext context = SpringApplication.run(Main.class, args);
-		TestService service = context.getBean(TestService.class);
-		service.test();
+	public static void main(String[] args) {
+		SpringApplication.run(Main.class, args);
 	}
 }

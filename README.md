@@ -11,3 +11,5 @@ Spring Framework для Diasoft
   /spring-04
 5. "Чёрная магия" Spring Boot
   /spring-04
+7. Продвинутая конфигурация Spring-приложений 
+  /spring-04
