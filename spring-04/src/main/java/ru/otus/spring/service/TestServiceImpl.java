@@ -1,7 +1,8 @@
 package ru.otus.spring.service;
 
-import org.springframework.beans.factory.annotation.Value;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.otus.spring.config.Config;
 import ru.otus.spring.dao.QuestionDao;
 import ru.otus.spring.dao.QuestionLoadingException;
 import ru.otus.spring.domain.Question;
@@ -9,17 +10,13 @@ import ru.otus.spring.domain.Question;
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class TestServiceImpl implements TestService {
 
     private final QuestionDao dao;
-    private final int limit;
     private final InOutService inOutService;
-
-    public TestServiceImpl(QuestionDao dao, @Value("${test.limit}") int limit, InOutService inOutService) {
-        this.dao = dao;
-        this.limit = limit;
-        this.inOutService = inOutService;
-    }
+    private final Config config;
+    private final LocalizationService localizationService;
 
     @Override
     public void test() throws QuestionLoadingException {
@@ -38,17 +35,17 @@ public class TestServiceImpl implements TestService {
     }
 
     private void printResult(String userName, int countAnswer) {
-        if (countAnswer >= limit) {
-            inOutService.println(userName + ": Test passed");
+        if (countAnswer >= config.getLimit()) {
+            inOutService.println(userName + ": " + localizationService.getMessage("test.passed"));
         } else {
-            inOutService.println(userName + ": Test failed");
+            inOutService.println(userName + ": " + localizationService.getMessage("test.failed"));
         }
     }
 
     private String getAnswer(Question question) {
         inOutService.println(question.getQuestion());
         if (!question.getAnswers().isEmpty()) {
-            inOutService.println("Answer options:");
+            inOutService.println(localizationService.getMessage("answer.options"));
             for (String answer : question.getAnswers()) {
                 inOutService.println("  " + answer);
             }
@@ -57,7 +54,7 @@ public class TestServiceImpl implements TestService {
     }
 
     private String getUserName() {
-        inOutService.println("Enter your firstname and lastname");
+        inOutService.println(localizationService.getMessage("enter.name"));
         return inOutService.nextLine();
     }
 

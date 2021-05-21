@@ -1,0 +1,10 @@
+
+spring:
+  messages:
+    basename: i18n.messages
+    fallback-to-system-locale: false
+
+test:
+  locale-name: ru-RU
+  csv-path: questions_ru_RU.csv
+  limit: 3
