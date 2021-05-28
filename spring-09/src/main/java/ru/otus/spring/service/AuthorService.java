@@ -1,5 +1,7 @@
 package ru.otus.spring.service;
 
+import ru.otus.spring.domain.Author;
+
 public interface AuthorService {
-    long findOrCreateByFio(String fio);
+    Author findOrCreateByFio(String fio);
 }

@@ -1,23 +1,16 @@
 package ru.otus.spring.service;
 
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.h2.util.StringUtils;
 import org.springframework.stereotype.Service;
-import ru.otus.spring.dao.AuthorDao;
 import ru.otus.spring.dao.BookDao;
-import ru.otus.spring.dao.GenreDao;
-import ru.otus.spring.domain.Author;
 import ru.otus.spring.domain.Book;
-import ru.otus.spring.domain.Genre;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
-    private final AuthorDao authorDao;
-    private final GenreDao genreDao;
     private final BookDao bookDao;
     private final GenreService genreService;
     private final AuthorService authorService;
@@ -41,11 +34,11 @@ public class BookServiceImpl implements BookService {
     public long insert(String bookTitle, String authorFio, String genreName) {
         checkBookParams(bookTitle, authorFio, genreName);
 
-        var genreId = genreService.findOrCreateByName(genreName);
-        var authorId = authorService.findOrCreateByFio(authorFio);
+        var genre = genreService.findOrCreateByName(genreName);
+        var author = authorService.findOrCreateByFio(authorFio);
 
-        var book = new Book(authorId, genreId, bookTitle);
-        var books = bookDao.getByParams(book);
+        var book = new Book(author, genre, bookTitle);
+        var books = bookDao.getByExample(book);
         if (books.size() == 0) {
             return bookDao.insert(book);
         } else {
@@ -72,8 +65,8 @@ public class BookServiceImpl implements BookService {
         var book = bookDao.getById(id);
 
         book.setTitle(bookTitle);
-        book.setAuthorId(authorService.findOrCreateByFio(authorFio));
-        book.setGenreId(genreService.findOrCreateByName(genreName));
+        book.setAuthor(authorService.findOrCreateByFio(authorFio));
+        book.setGenre(genreService.findOrCreateByName(genreName));
 
         bookDao.update(book);
     }

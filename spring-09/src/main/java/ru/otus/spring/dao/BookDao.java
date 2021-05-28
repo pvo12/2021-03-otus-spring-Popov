@@ -14,7 +14,7 @@ public interface BookDao {
 
     Book getById(long id);
 
-    List<Book> getByParams(Book book);
+    List<Book> getByExample(Book book);
 
     List<Book> getAll();
 

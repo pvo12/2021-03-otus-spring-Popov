@@ -7,7 +7,6 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcOperations;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
-import ru.otus.spring.domain.Author;
 import ru.otus.spring.domain.Book;
 
 import java.sql.ResultSet;
@@ -20,14 +19,16 @@ import java.util.Map;
 @Repository
 public class BookDaoJdbc implements BookDao {
     private final NamedParameterJdbcOperations jdbc;
+    private final AuthorDao authorDao;
+    private final GenreDao genreDao;
 
-    private static class BookMapper implements RowMapper<Book> {
+    private class BookMapper implements RowMapper<Book> {
         @Override
         public Book mapRow(ResultSet resultSet, int i) throws SQLException {
             return new Book(
                     resultSet.getLong("id"),
-                    resultSet.getLong("author_id"),
-                    resultSet.getLong("genre_id"),
+                    authorDao.getById(resultSet.getLong("author_id")),
+                    genreDao.getById(resultSet.getLong("genre_id")),
                     resultSet.getString("title")
             );
         }
@@ -42,8 +43,8 @@ public class BookDaoJdbc implements BookDao {
     public long insert(Book book) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         MapSqlParameterSource params = new MapSqlParameterSource(
-                Map.of("author_id", book.getAuthorId(),
-                        "genre_id", book.getGenreId(),
+                Map.of("author_id", book.getAuthor().getId(),
+                        "genre_id", book.getGenre().getId(),
                         "title", book.getTitle()
                 ));
 
@@ -62,17 +63,17 @@ public class BookDaoJdbc implements BookDao {
     @Override
     public Book getById(long id) {
         return jdbc.queryForObject(
-                "select * from books where id = :id", Map.of("id", id), new BookMapper()
+                "select id, author_id, genre_id, title from books where id = :id", Map.of("id", id), new BookMapper()
         );
     }
 
     @Override
-    public List<Book> getByParams(Book book) {
+    public List<Book> getByExample(Book book) {
         return jdbc.query(
-                "select * from books where title = :title and author_id = :author_id and genre_id = :genre_id",
+                "select id, author_id, genre_id, title from books where title = :title and author_id = :author_id and genre_id = :genre_id",
                 Map.of("title", book.getTitle(),
-                        "author_id", book.getAuthorId(),
-                        "genre_id", book.getGenreId()),
+                        "author_id", book.getAuthor().getId(),
+                        "genre_id", book.getGenre().getId()),
                 new BookDaoJdbc.BookMapper()
         );
     }

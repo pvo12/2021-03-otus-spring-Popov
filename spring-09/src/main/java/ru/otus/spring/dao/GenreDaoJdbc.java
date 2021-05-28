@@ -47,7 +47,7 @@ public class GenreDaoJdbc implements GenreDao {
     @Override
     public Genre getById(long id) {
         return jdbc.queryForObject(
-                "select * from genres where id = :id", Map.of("id", id), new GenreMapper()
+                "select id, name from genres where id = :id", Map.of("id", id), new GenreMapper()
         );
     }
 
@@ -59,12 +59,7 @@ public class GenreDaoJdbc implements GenreDao {
     @Override
     public List<Genre> getByName(String name) {
         return jdbc.query(
-                "select * from genres where name = :name", Map.of("name", name), new GenreMapper()
+                "select id, name from genres where name = :name", Map.of("name", name), new GenreMapper()
         );
-    }
-
-    @Override
-    public void deleteById(long id) {
-        jdbc.update("delete from genres where id = :id", Map.of("id", id));
     }
 }

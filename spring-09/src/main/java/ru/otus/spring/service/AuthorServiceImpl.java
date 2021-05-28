@@ -11,12 +11,14 @@ public class AuthorServiceImpl implements AuthorService {
     private final AuthorDao authorDao;
 
     @Override
-    public long findOrCreateByFio(String fio) {
+    public Author findOrCreateByFio(String fio) {
         var authors = authorDao.getByFio(fio);
         if (authors.size() == 0) {
-            return authorDao.insert(new Author(0, fio));
+            Author author = new Author(0, fio);
+            author.setId(authorDao.insert(author));
+            return author;
         } else {
-            return authors.get(0).getId();
+            return authors.get(0);
         }
     }
 }

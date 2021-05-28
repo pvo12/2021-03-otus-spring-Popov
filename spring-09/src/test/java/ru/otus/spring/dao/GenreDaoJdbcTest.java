@@ -5,12 +5,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
 import org.springframework.context.annotation.Import;
-import org.springframework.dao.EmptyResultDataAccessException;
 import ru.otus.spring.domain.Genre;
 
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Dao для работы с жанрами должно")
 @JdbcTest
@@ -46,18 +45,6 @@ class GenreDaoJdbcTest {
         Genre expectedGenre = new Genre(EXISTING_GENRE_ID, EXISTING_GENRE_NAME);
         Genre actualGenre = genreDao.getById(expectedGenre.getId());
         assertThat(actualGenre).usingRecursiveComparison().isEqualTo(expectedGenre);
-    }
-
-    @DisplayName("удалять заданный жанр по его id")
-    @Test
-    void shouldCorrectDeleteGenreById() {
-        assertThatCode(() -> genreDao.getById(EXISTING_GENRE_ID))
-                .doesNotThrowAnyException();
-
-        genreDao.deleteById(EXISTING_GENRE_ID);
-
-        assertThatThrownBy(() -> genreDao.getById(EXISTING_GENRE_ID))
-                .isInstanceOf(EmptyResultDataAccessException.class);
     }
 
     @DisplayName("возвращать ожидаемый список жанров")

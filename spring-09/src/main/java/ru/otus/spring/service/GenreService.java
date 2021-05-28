@@ -1,5 +1,7 @@
 package ru.otus.spring.service;
 
+import ru.otus.spring.domain.Genre;
+
 public interface GenreService {
-    long findOrCreateByName(String name);
+    Genre findOrCreateByName(String name);
 }

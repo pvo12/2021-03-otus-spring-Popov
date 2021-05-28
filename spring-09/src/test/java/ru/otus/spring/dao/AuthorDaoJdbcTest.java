@@ -48,18 +48,6 @@ class AuthorDaoJdbcTest {
         assertThat(actualAuthor).usingRecursiveComparison().isEqualTo(expectedAuthor);
     }
 
-    @DisplayName("удалять заданного автора по его id")
-    @Test
-    void shouldCorrectDeleteAuthorById() {
-        assertThatCode(() -> authorDao.getById(EXISTING_AUTHOR_ID))
-                .doesNotThrowAnyException();
-
-        authorDao.deleteById(EXISTING_AUTHOR_ID);
-
-        assertThatThrownBy(() -> authorDao.getById(EXISTING_AUTHOR_ID))
-                .isInstanceOf(EmptyResultDataAccessException.class);
-    }
-
     @DisplayName("возвращать ожидаемый список авторов")
     @Test
     void shouldReturnExpectedAuthorsList() {

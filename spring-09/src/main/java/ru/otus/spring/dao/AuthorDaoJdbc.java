@@ -29,7 +29,7 @@ public class AuthorDaoJdbc implements AuthorDao {
 
     @Override
     public int count() {
-        return jdbc.getJdbcOperations().queryForObject("select count(*) from authors", Integer.class);
+        return jdbc.getJdbcOperations().queryForObject("select count(1) from authors", Integer.class);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class AuthorDaoJdbc implements AuthorDao {
     @Override
     public Author getById(long id) {
         return jdbc.queryForObject(
-                "select * from authors where id = :id", Map.of("id", id), new AuthorMapper()
+                "select id, fio from authors where id = :id", Map.of("id", id), new AuthorMapper()
         );
     }
 
@@ -60,12 +60,6 @@ public class AuthorDaoJdbc implements AuthorDao {
 
     @Override
     public List<Author> getAll() {
-        return jdbc.query("select * from authors", new AuthorMapper());
+        return jdbc.query("select id, fio from authors", new AuthorMapper());
     }
-
-    @Override
-    public void deleteById(long id) {
-        jdbc.update("delete from authors where id = :id", Map.of("id", id));
-    }
-
 }

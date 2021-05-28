@@ -11,12 +11,14 @@ public class GenreServiceImpl implements GenreService {
     private final GenreDao genreDao;
 
     @Override
-    public long findOrCreateByName(String name) {
+    public Genre findOrCreateByName(String name) {
         var genres = genreDao.getByName(name);
         if (genres.size() == 0) {
-            return genreDao.insert(new Genre(0, name));
+            Genre genre = new Genre(0, name);
+            genre.setId(genreDao.insert(genre));
+            return genre;
         } else {
-            return genres.get(0).getId();
+            return genres.get(0);
         }
     }
 }
