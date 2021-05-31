@@ -48,13 +48,13 @@ public class BookServiceImpl implements BookService {
 
     private void checkBookParams(String bookTitle, String authorFio, String genreName) {
         if (StringUtils.isNullOrEmpty(bookTitle)) {
-            throw new BoolServiceException("Title can't be blank");
+            throw new BookServiceException("Title can't be blank");
         }
         if (StringUtils.isNullOrEmpty(authorFio)) {
-            throw new BoolServiceException("Author can't be blank");
+            throw new BookServiceException("Author can't be blank");
         }
         if (StringUtils.isNullOrEmpty(genreName)) {
-            throw new BoolServiceException("Genre can't be blank");
+            throw new BookServiceException("Genre can't be blank");
         }
     }
 

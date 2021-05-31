@@ -87,22 +87,22 @@ class BookServiceImplTest {
     @Test
     @DisplayName("падать с ошибкой при не переданных параметрах книги")
     void shouldFailWhenEmptyTitle() {
-        Assertions.assertThrows(BoolServiceException.class, () -> {
+        Assertions.assertThrows(BookServiceException.class, () -> {
             bookService.insert("", EXISTING_AUTHOR_FIO, EXISTING_GENRE_NAME);
         });
-        Assertions.assertThrows(BoolServiceException.class, () -> {
+        Assertions.assertThrows(BookServiceException.class, () -> {
             bookService.insert(EXISTING_BOOK_TITLE, "", EXISTING_GENRE_NAME);
         });
-        Assertions.assertThrows(BoolServiceException.class, () -> {
+        Assertions.assertThrows(BookServiceException.class, () -> {
             bookService.insert(EXISTING_BOOK_TITLE, EXISTING_AUTHOR_FIO, "");
         });
-        Assertions.assertThrows(BoolServiceException.class, () -> {
+        Assertions.assertThrows(BookServiceException.class, () -> {
             bookService.update(EXISTING_BOOK_ID, "", EXISTING_AUTHOR_FIO, EXISTING_GENRE_NAME);
         });
-        Assertions.assertThrows(BoolServiceException.class, () -> {
+        Assertions.assertThrows(BookServiceException.class, () -> {
             bookService.update(EXISTING_BOOK_ID, EXISTING_BOOK_TITLE, "", EXISTING_GENRE_NAME);
         });
-        Assertions.assertThrows(BoolServiceException.class, () -> {
+        Assertions.assertThrows(BookServiceException.class, () -> {
             bookService.update(EXISTING_BOOK_ID, EXISTING_BOOK_TITLE, EXISTING_AUTHOR_FIO, "");
         });
     }
