@@ -62,12 +62,12 @@ public class BookDaoJdbc implements BookDao {
 
     @Override
     public Book getById(long id) {
-        return jdbc.queryForObject(
-                "select b.id, b.author_id, b.genre_id, b.title, a.fio, g.name " +
+        return jdbc.queryForObject("select b.id, b.author_id, b.genre_id, b.title, a.fio, g.name " +
                         " from books b " +
                         " join authors a on a.id = b.author_id " +
                         " join genres g on g.id = b.genre_id " +
-                        "where b.id = :id", Map.of("id", id), new BookMapper()
+                        "where b.id = :id",
+                Map.of("id", id), new BookMapper()
         );
     }
 
