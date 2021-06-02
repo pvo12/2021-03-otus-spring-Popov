@@ -29,7 +29,7 @@ public class GenreDaoJdbc implements GenreDao {
 
     @Override
     public int count() {
-        return jdbc.getJdbcOperations().queryForObject("select count(*) from genres", Integer.class);
+        return jdbc.getJdbcOperations().queryForObject("select count(1) from genres", Integer.class);
     }
 
     @Override
