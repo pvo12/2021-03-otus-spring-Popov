@@ -22,7 +22,7 @@ import java.util.Map;
 public class BookDaoJdbc implements BookDao {
     private final NamedParameterJdbcOperations jdbc;
 
-    private class BookMapper implements RowMapper<Book> {
+    private static class BookMapper implements RowMapper<Book> {
         @Override
         public Book mapRow(ResultSet resultSet, int i) throws SQLException {
             return new Book(
