@@ -1,0 +1,31 @@
+1621501913829:help
+1621501920048:add
+1621501928083:df
+1621501931302:help
+1621501976070:add book2 author1 genre1
+1621502536127:hel
+1621502537663:help
+1621502567759:add -title book2 -author author1 -genre genre1
+1621502589195:add -title book2 -author author2 -genre genre1
+1621502688988:add -title book2 -author a2 -genre genre1
+1621505696981:add -title book2 -author author1 -genre genre1
+1621505723771:add -title book2 -author author2 -genre genre2
+1621505993656:add -title book2 -authour author2 -genre genre2
+1621506018408:add -title book2 -author author2 -genre genre2
+1621506137447:add  -author author2 -genre genre2
+1621506456086:add -title book2 -author author2 -genre genre2
+1621506482930:add -title  -author author2 -genre genre2
+1621506500798:add -title -author author2 -genre genre2
+1621506516616:add -title -author author2 -genre
+1621506536561:add -title   -author author2 -genre
+1621506548791:add -title  t
+1621569950192:get -id 1
+1621570170735:add -title book2 -author a -genre g
+1621570227279:getAll
+1621570242485:add -title book2 -author a -genre g
+1621570246363:getAll
+1621570256678:delete -id=1
+1621570282629:delete -id 1
+1621570285247:getAll
+1621570315993:update -id 2 -title title111 -author author3 -genre gen
+1621570318942:getAll
