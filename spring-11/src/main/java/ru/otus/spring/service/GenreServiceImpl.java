@@ -2,21 +2,22 @@ package ru.otus.spring.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.otus.spring.dao.GenreDao;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.domain.Genre;
+import ru.otus.spring.repositories.GenreRepositoryJpa;
 
 @Service
 @RequiredArgsConstructor
 public class GenreServiceImpl implements GenreService {
-    private final GenreDao genreDao;
+    private final GenreRepositoryJpa repository;
 
     @Override
+    @Transactional
     public Genre findOrCreateByName(String name) {
-        var genres = genreDao.getByName(name);
+        var genres = repository.findByName(name);
         if (genres.size() == 0) {
             Genre genre = new Genre(0, name);
-            genre.setId(genreDao.insert(genre));
-            return genre;
+            return repository.save(genre);
         } else {
             return genres.get(0);
         }

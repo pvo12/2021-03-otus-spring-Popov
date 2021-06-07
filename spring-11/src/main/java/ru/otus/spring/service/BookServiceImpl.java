@@ -1,36 +1,42 @@
 package ru.otus.spring.service;
 
 import lombok.RequiredArgsConstructor;
-import org.h2.util.StringUtils;
 import org.springframework.stereotype.Service;
-import ru.otus.spring.dao.BookDao;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.domain.Book;
+import ru.otus.spring.repositories.BookRepositoryJpa;
 
 import java.util.List;
+
+import static org.springframework.util.StringUtils.hasLength;
 
 @Service
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
-    private final BookDao bookDao;
+    private final BookRepositoryJpa repository;
     private final GenreService genreService;
     private final AuthorService authorService;
 
     @Override
+    @Transactional
     public void delete(long id) {
-        bookDao.deleteById(id);
+        repository.deleteById(id);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Book getById(long id) {
-        return bookDao.getById(id);
+        return repository.findById(id).orElseThrow(() -> new BookServiceException("Book not found"));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Book> getAll() {
-        return bookDao.getAll();
+        return repository.findAll();
     }
 
     @Override
+    @Transactional
     public long insert(String bookTitle, String authorFio, String genreName) {
         checkBookParams(bookTitle, authorFio, genreName);
 
@@ -38,36 +44,37 @@ public class BookServiceImpl implements BookService {
         var author = authorService.findOrCreateByFio(authorFio);
 
         var book = new Book(author, genre, bookTitle);
-        var books = bookDao.getByExample(book);
+        var books = repository.findByExample(book);
         if (books.size() == 0) {
-            return bookDao.insert(book);
+            return repository.save(book).getId();
         } else {
             return books.get(0).getId();
         }
     }
 
     private void checkBookParams(String bookTitle, String authorFio, String genreName) {
-        if (StringUtils.isNullOrEmpty(bookTitle)) {
+        if (!hasLength(bookTitle)) {
             throw new BookServiceException("Title can't be blank");
         }
-        if (StringUtils.isNullOrEmpty(authorFio)) {
+        if (!hasLength(authorFio)) {
             throw new BookServiceException("Author can't be blank");
         }
-        if (StringUtils.isNullOrEmpty(genreName)) {
+        if (!hasLength(genreName)) {
             throw new BookServiceException("Genre can't be blank");
         }
     }
 
     @Override
+    @Transactional
     public void update(long id, String bookTitle, String authorFio, String genreName) {
         checkBookParams(bookTitle, authorFio, genreName);
 
-        var book = bookDao.getById(id);
+        var book = repository.findById(id).orElseThrow(() -> new BookServiceException("Book not found"));
 
         book.setTitle(bookTitle);
         book.setAuthor(authorService.findOrCreateByFio(authorFio));
         book.setGenre(genreService.findOrCreateByName(genreName));
 
-        bookDao.update(book);
+        repository.save(book);
     }
 }

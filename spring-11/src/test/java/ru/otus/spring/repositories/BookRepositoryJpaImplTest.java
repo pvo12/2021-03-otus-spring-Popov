@@ -1,27 +1,21 @@
-package ru.otus.spring.dao;
+package ru.otus.spring.repositories;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
-import org.springframework.dao.EmptyResultDataAccessException;
 import ru.otus.spring.domain.Author;
 import ru.otus.spring.domain.Book;
 import ru.otus.spring.domain.Genre;
 
-import java.util.List;
+import static org.assertj.core.api.Assertions.assertThat;
 
-import static org.assertj.core.api.Assertions.*;
-
-@DisplayName("Dao для работы с книгами должно")
-@JdbcTest
-@Import(BookDaoJdbc.class)
-class BookDaoJdbcTest {
-
+@DisplayName("Репозиторий для работы с книгами должен")
+@DataJpaTest
+@Import(BookRepositoryJpaImpl.class)
+class BookRepositoryJpaImplTest {
     private static final int EXPECTED_BOOKS_COUNT = 1;
     private static final int EXISTING_BOOK_ID = 1;
     private static final int EXISTING_AUTHOR_ID = 1;
@@ -29,33 +23,21 @@ class BookDaoJdbcTest {
     private static final String EXISTING_BOOK_TITLE = "book1";
     private static final Author EXISTING_AUTHOR = new Author(EXISTING_AUTHOR_ID, "author1");
     private static final Genre EXISTING_GENRE = new Genre(EXISTING_GENRE_ID, "genre1");
+    @Autowired
+    private BookRepositoryJpaImpl repositoryJpa;
 
     @Autowired
-    private BookDaoJdbc bookDao;
-    @MockBean
-    private AuthorDao authorDao;
-    @MockBean
-    private GenreDao genreDao;
-
-    @BeforeEach
-    public void setUp() {
-        Mockito.when(authorDao.getById(EXISTING_AUTHOR_ID)).thenReturn(EXISTING_AUTHOR);
-        Mockito.when(genreDao.getById(EXISTING_GENRE_ID)).thenReturn(EXISTING_GENRE);
-    }
-
-    @DisplayName("возвращать ожидаемое количество книг в БД")
-    @Test
-    void shouldReturnExpectedBookCount() {
-        int actualBooksCount = bookDao.count();
-        assertThat(actualBooksCount).isEqualTo(EXPECTED_BOOKS_COUNT);
-    }
+    private TestEntityManager em;
 
     @DisplayName("добавлять книгу в БД")
     @Test
     void shouldInsertBook() {
-        Book expectedBook = new Book(2, EXISTING_AUTHOR, EXISTING_GENRE, "book2");
-        bookDao.insert(expectedBook);
-        Book actualBook = bookDao.getById(expectedBook.getId());
+        Book expectedBook = new Book(0, EXISTING_AUTHOR, EXISTING_GENRE, "book2");
+        repositoryJpa.save(expectedBook);
+        assertThat(expectedBook.getId()).isGreaterThan(0);
+
+        Book actualBook = em.find(Book.class, expectedBook.getId());
+
         assertThat(actualBook).usingRecursiveComparison().isEqualTo(expectedBook);
     }
 
@@ -63,27 +45,36 @@ class BookDaoJdbcTest {
     @Test
     void shouldReturnExpectedBookById() {
         Book expectedBook = new Book(EXISTING_BOOK_ID, EXISTING_AUTHOR, EXISTING_GENRE, EXISTING_BOOK_TITLE);
-        Book actualBook = bookDao.getById(expectedBook.getId());
+        Book actualBook = repositoryJpa.findById(EXISTING_BOOK_ID).orElseThrow();
         assertThat(actualBook).usingRecursiveComparison().isEqualTo(expectedBook);
     }
 
     @DisplayName("удалять заданную книгу по ее id")
     @Test
     void shouldCorrectDeleteBookById() {
-        assertThatCode(() -> bookDao.getById(EXISTING_BOOK_ID))
-                .doesNotThrowAnyException();
 
-        bookDao.deleteById(EXISTING_BOOK_ID);
+        assertThat(repositoryJpa.findById(EXISTING_BOOK_ID).isPresent());
 
-        assertThatThrownBy(() -> bookDao.getById(EXISTING_BOOK_ID))
-                .isInstanceOf(EmptyResultDataAccessException.class);
+        repositoryJpa.deleteById(EXISTING_BOOK_ID);
+
+        assertThat(repositoryJpa.findById(EXISTING_BOOK_ID).isEmpty());
     }
 
     @DisplayName("возвращать ожидаемый список книг")
     @Test
     void shouldReturnExpectedBooksList() {
         Book expectedBook = new Book(EXISTING_BOOK_ID, EXISTING_AUTHOR, EXISTING_GENRE, EXISTING_BOOK_TITLE);
-        List<Book> actualBookList = bookDao.getAll();
+        var actualBookList = repositoryJpa.findAll();
+        assertThat(actualBookList)
+                .usingFieldByFieldElementComparator()
+                .containsExactlyInAnyOrder(expectedBook);
+    }
+
+    @DisplayName("возвращать список книг по заданному примеру")
+    @Test
+    void shouldReturnExpectedBooksListByExample() {
+        Book expectedBook = new Book(EXISTING_BOOK_ID, EXISTING_AUTHOR, EXISTING_GENRE, EXISTING_BOOK_TITLE);
+        var actualBookList = repositoryJpa.findByExample(expectedBook);
         assertThat(actualBookList)
                 .usingFieldByFieldElementComparator()
                 .containsExactlyInAnyOrder(expectedBook);

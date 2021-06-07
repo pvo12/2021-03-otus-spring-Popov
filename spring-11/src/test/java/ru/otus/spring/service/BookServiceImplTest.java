@@ -8,12 +8,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import ru.otus.spring.dao.BookDao;
 import ru.otus.spring.domain.Author;
 import ru.otus.spring.domain.Book;
 import ru.otus.spring.domain.Genre;
+import ru.otus.spring.repositories.BookRepositoryJpaImpl;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -23,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(MockitoExtension.class)
 class BookServiceImplTest {
     @Mock
-    BookDao bookDao;
+    BookRepositoryJpaImpl bookRepositoryJpa;
     @Mock
     GenreService genreService;
     @Mock
@@ -46,14 +47,14 @@ class BookServiceImplTest {
     @DisplayName("удалять книгу по переданному id")
     void shouldDeleteBook() {
         bookService.delete(EXISTING_BOOK_ID);
-        Mockito.verify(bookDao, Mockito.times(1)).deleteById(EXISTING_BOOK_ID);
+        Mockito.verify(bookRepositoryJpa, Mockito.times(1)).deleteById(EXISTING_BOOK_ID);
     }
 
     @Test
     @DisplayName("возвращать книгу по переданному id")
     void shouldGetBook() {
         Book book = new Book(EXISTING_BOOK_ID, EXISTING_AUTHOR, EXISTING_GENRE, EXISTING_BOOK_TITLE);
-        given(bookDao.getById(EXISTING_BOOK_ID)).willReturn(book);
+        given(bookRepositoryJpa.findById(EXISTING_BOOK_ID)).willReturn(Optional.of(book));
         var book2 = bookService.getById(EXISTING_BOOK_ID);
         assertThat(book2).isEqualTo(book);
     }
@@ -62,7 +63,7 @@ class BookServiceImplTest {
     @DisplayName("возвращать список всех книг")
     void shouldGetAllBook() {
         Book book = new Book(EXISTING_BOOK_ID, EXISTING_AUTHOR, EXISTING_GENRE, EXISTING_BOOK_TITLE);
-        given(bookDao.getAll()).willReturn(List.of(book));
+        given(bookRepositoryJpa.findAll()).willReturn(List.of(book));
         var books = bookService.getAll();
         assertThat(books).isEqualTo(List.of(book));
     }
@@ -74,14 +75,16 @@ class BookServiceImplTest {
         given(authorService.findOrCreateByFio(EXISTING_AUTHOR_FIO)).willReturn(EXISTING_AUTHOR);
 
         Book book = new Book(EXISTING_AUTHOR, EXISTING_GENRE, EXPECTING_BOOK_TITLE);
-        given(bookDao.getByExample(book)).willReturn(List.of());
-        given(bookDao.insert(book)).willReturn((long) 2);
+        Book expectedBook = new Book(2, EXISTING_AUTHOR, EXISTING_GENRE, EXPECTING_BOOK_TITLE);
+
+        given(bookRepositoryJpa.findByExample(book)).willReturn(List.of());
+        given(bookRepositoryJpa.save(book)).willReturn(expectedBook);
 
         var id = bookService.insert(EXPECTING_BOOK_TITLE, EXISTING_AUTHOR_FIO, EXISTING_GENRE_NAME);
 
         assertThat(id).isEqualTo(2);
 
-        Mockito.verify(bookDao, Mockito.times(1)).insert(book);
+        Mockito.verify(bookRepositoryJpa, Mockito.times(1)).save(book);
     }
 
     @Test
@@ -116,19 +119,19 @@ class BookServiceImplTest {
         Book book1 = new Book(EXISTING_AUTHOR, EXISTING_GENRE, EXISTING_BOOK_TITLE);
         Book book2 = new Book(EXISTING_AUTHOR, EXISTING_GENRE, EXISTING_BOOK_TITLE);
         book2.setId(EXISTING_BOOK_ID);
-        given(bookDao.getByExample(book1)).willReturn(List.of(book2));
+        given(bookRepositoryJpa.findByExample(book1)).willReturn(List.of(book2));
 
         var id = bookService.insert(EXISTING_BOOK_TITLE, EXISTING_AUTHOR_FIO, EXISTING_GENRE_NAME);
         assertThat(id).isEqualTo(EXISTING_BOOK_ID);
 
-        Mockito.verify(bookDao, Mockito.times(0)).insert(any());
+        Mockito.verify(bookRepositoryJpa, Mockito.times(0)).save(any());
     }
 
     @Test
     @DisplayName("изменять параметры книги")
     void shouldUpdateBook() {
         Book book = new Book(EXISTING_BOOK_ID, EXISTING_AUTHOR, EXISTING_GENRE, EXISTING_BOOK_TITLE);
-        given(bookDao.getById(EXISTING_BOOK_ID)).willReturn(book);
+        given(bookRepositoryJpa.findById(EXISTING_BOOK_ID)).willReturn(Optional.of(book));
 
         given(genreService.findOrCreateByName(EXPECTING_GENRE_NAME)).willReturn(EXPECTING_GENRE);
         given(authorService.findOrCreateByFio(EXPECTING_AUTHOR_FIO)).willReturn(EXPECTING_AUTHOR);
@@ -137,6 +140,6 @@ class BookServiceImplTest {
 
         Book book2 = new Book(EXISTING_BOOK_ID, EXPECTING_AUTHOR, EXPECTING_GENRE, EXPECTING_BOOK_TITLE);
 
-        Mockito.verify(bookDao).update(book2);
+        Mockito.verify(bookRepositoryJpa).save(book2);
     }
 }

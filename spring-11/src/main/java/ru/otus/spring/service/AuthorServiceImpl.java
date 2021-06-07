@@ -2,21 +2,22 @@ package ru.otus.spring.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.otus.spring.dao.AuthorDao;
+import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.domain.Author;
+import ru.otus.spring.repositories.AuthorRepositoryJpa;
 
 @Service
 @RequiredArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
-    private final AuthorDao authorDao;
+    private final AuthorRepositoryJpa repository;
 
     @Override
+    @Transactional
     public Author findOrCreateByFio(String fio) {
-        var authors = authorDao.getByFio(fio);
+        var authors = repository.findByFio(fio);
         if (authors.size() == 0) {
             Author author = new Author(0, fio);
-            author.setId(authorDao.insert(author));
-            return author;
+            return repository.save(author);
         } else {
             return authors.get(0);
         }
