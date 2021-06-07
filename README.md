@@ -15,3 +15,5 @@ Spring Framework для Diasoft
   /spring-04
 9. DAO на Spring JDBC
   /spring-09
+11. 11. JPQL, Spring ORM, DAO на основе Spring ORM + JPA 
+  /spring-11
