@@ -14,8 +14,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Репозиторий для работы с книгами должен")
 @DataJpaTest
-@Import(BookRepositoryJpaImpl.class)
-class BookRepositoryJpaImplTest {
+@Import(BookRepositoryJpa.class)
+class BookRepositoryJpaTest {
     private static final int EXPECTED_BOOKS_COUNT = 1;
     private static final int EXISTING_BOOK_ID = 1;
     private static final int EXISTING_AUTHOR_ID = 1;
@@ -24,7 +24,7 @@ class BookRepositoryJpaImplTest {
     private static final Author EXISTING_AUTHOR = new Author(EXISTING_AUTHOR_ID, "author1");
     private static final Genre EXISTING_GENRE = new Genre(EXISTING_GENRE_ID, "genre1");
     @Autowired
-    private BookRepositoryJpaImpl repositoryJpa;
+    private BookRepositoryJpa repositoryJpa;
 
     @Autowired
     private TestEntityManager em;

@@ -5,6 +5,8 @@ import org.springframework.shell.standard.ShellComponent;
 import org.springframework.shell.standard.ShellMethod;
 import org.springframework.shell.standard.ShellOption;
 import ru.otus.spring.domain.Book;
+import ru.otus.spring.domain.BookComment;
+import ru.otus.spring.service.BookCommentService;
 import ru.otus.spring.service.BookService;
 
 import java.util.List;
@@ -13,6 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 public class BooksShell {
     private final BookService service;
+    private final BookCommentService bookCommentService;
 
     @ShellMethod(value = "Add book -title -author -genre", key = "add")
     public String addBook(
@@ -51,5 +54,11 @@ public class BooksShell {
     public List<Book> getBook() {
         return service.getAll();
     }
+
+    @ShellMethod(value = "Get all book comments", key = "getAllComments")
+    public List<BookComment> getBookComments() {
+        return bookCommentService.getAll();
+    }
+
 }
 

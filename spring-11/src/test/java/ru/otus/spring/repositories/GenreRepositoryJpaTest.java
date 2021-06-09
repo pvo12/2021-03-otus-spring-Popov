@@ -7,22 +7,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
-import ru.otus.spring.domain.Author;
 import ru.otus.spring.domain.Genre;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Репозиторий для работы с жанрами ")
 @DataJpaTest
-@Import(GenreRepositoryJpaImpl.class)
-class GenreRepositoryJpaImplTest {
+@Import(GenreRepositoryJpa.class)
+class GenreRepositoryJpaTest {
     private static final String EXISTING_GENRE_NAME = "genre1";
     private static final Long EXISTING_GENRE_ID = 1L;
     @Autowired
-    private GenreRepositoryJpaImpl repositoryJpa;
+    private GenreRepositoryJpa repositoryJpa;
 
     @Autowired
     private TestEntityManager em;

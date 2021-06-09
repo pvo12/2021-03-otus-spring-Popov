@@ -11,7 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import ru.otus.spring.domain.Author;
 import ru.otus.spring.domain.Book;
 import ru.otus.spring.domain.Genre;
-import ru.otus.spring.repositories.BookRepositoryJpaImpl;
+import ru.otus.spring.repositories.BookRepositoryJpa;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ExtendWith(MockitoExtension.class)
 class BookServiceImplTest {
     @Mock
-    BookRepositoryJpaImpl bookRepositoryJpa;
+    BookRepositoryJpa bookRepositoryJpa;
     @Mock
     GenreService genreService;
     @Mock

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.domain.Book;
-import ru.otus.spring.repositories.BookRepositoryJpa;
+import ru.otus.spring.repositories.BookRepository;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import static org.springframework.util.StringUtils.hasLength;
 @Service
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
-    private final BookRepositoryJpa repository;
+    private final BookRepository repository;
     private final GenreService genreService;
     private final AuthorService authorService;
 

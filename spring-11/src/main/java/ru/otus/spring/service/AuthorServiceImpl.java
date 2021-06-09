@@ -4,12 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.domain.Author;
-import ru.otus.spring.repositories.AuthorRepositoryJpa;
+import ru.otus.spring.repositories.AuthorRepository;
 
 @Service
 @RequiredArgsConstructor
 public class AuthorServiceImpl implements AuthorService {
-    private final AuthorRepositoryJpa repository;
+    private final AuthorRepository repository;
 
     @Override
     @Transactional

@@ -1,8 +1,5 @@
 package ru.otus.spring.repositories;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.val;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,16 +12,15 @@ import ru.otus.spring.domain.Author;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Репозиторий для работы с авторами ")
 @DataJpaTest
-@Import(AuthorRepositoryJpaImpl.class)
-class AuthorRepositoryJpaImplTest {
+@Import(AuthorRepositoryJpa.class)
+class AuthorRepositoryJpaTest {
     private static final String EXISTING_AUTHOR_FIO = "author1";
     private static final Long EXISTING_AUTHOR_ID = 1L;
     @Autowired
-    private AuthorRepositoryJpaImpl repositoryJpa;
+    private AuthorRepositoryJpa repositoryJpa;
     @Autowired
     private TestEntityManager em;
 
