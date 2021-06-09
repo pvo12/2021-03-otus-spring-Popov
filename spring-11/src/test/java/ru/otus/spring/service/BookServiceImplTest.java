@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import ru.otus.spring.domain.Author;
 import ru.otus.spring.domain.Book;
 import ru.otus.spring.domain.Genre;
+import ru.otus.spring.repositories.BookCommentRepositoryJpa;
 import ru.otus.spring.repositories.BookRepositoryJpa;
 
 import java.util.List;
@@ -25,6 +26,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class BookServiceImplTest {
     @Mock
     BookRepositoryJpa bookRepositoryJpa;
+    @Mock
+    BookCommentRepositoryJpa bookCommentRepositoryJpa;
     @Mock
     GenreService genreService;
     @Mock
@@ -48,6 +51,7 @@ class BookServiceImplTest {
     void shouldDeleteBook() {
         bookService.delete(EXISTING_BOOK_ID);
         Mockito.verify(bookRepositoryJpa, Mockito.times(1)).deleteById(EXISTING_BOOK_ID);
+        Mockito.verify(bookCommentRepositoryJpa, Mockito.times(1)).deleteByBookId(EXISTING_BOOK_ID);
     }
 
     @Test

@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.context.annotation.Import;
-import ru.otus.spring.domain.Author;
-import ru.otus.spring.domain.Book;
-import ru.otus.spring.domain.BookComment;
-import ru.otus.spring.domain.Genre;
+import ru.otus.spring.domain.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -17,14 +14,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @Import(BookCommentRepositoryJpa.class)
 class BookCommentRepositoryJpaTest {
-    private static final int EXISTING_BOOK_ID = 1;
+    private static final int EXISTING_BOOK_ID = 2;
     private static final int EXISTING_BOOK_COMMENT_ID = 1;
-    private static final int EXISTING_AUTHOR_ID = 1;
-    private static final int EXISTING_GENRE_ID = 1;
-    private static final String EXISTING_BOOK_TITLE = "book1";
-    private static final Author EXISTING_AUTHOR = new Author(EXISTING_AUTHOR_ID, "author1");
-    private static final Genre EXISTING_GENRE = new Genre(EXISTING_GENRE_ID, "genre1");
-    private static final Book EXISTING_BOOK = new Book(EXISTING_BOOK_ID, EXISTING_AUTHOR, EXISTING_GENRE, EXISTING_BOOK_TITLE);
+    private static final String EXISTING_BOOK_TITLE = "book2";
+    private static final BookView EXISTING_BOOK = new BookView(EXISTING_BOOK_ID, EXISTING_BOOK_TITLE);
     private static final BookComment EXISTING_BOOK_COMMENT = new BookComment(EXISTING_BOOK_COMMENT_ID, EXISTING_BOOK, "comment1");
 
     @Autowired

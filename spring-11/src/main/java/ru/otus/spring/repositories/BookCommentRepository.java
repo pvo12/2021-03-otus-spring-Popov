@@ -10,4 +10,5 @@ public interface BookCommentRepository {
     Optional<BookComment> findById(long id);
     List<BookComment> findAll();
     void deleteById(long id);
+    void deleteByBookId(long id);
 }

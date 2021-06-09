@@ -29,11 +29,8 @@ public class BookCommentRepositoryJpa implements BookCommentRepository {
 
     @Override
     public List<BookComment> findAll() {
-        EntityGraph<?> entityGraph = em.getEntityGraph("books-entity-graph");
-
-        TypedQuery<BookComment> query = em.createQuery("select s from BookComment s ", BookComment.class);
-
-        query.setHint("javax.persistence.fetchgraph", entityGraph);
+        TypedQuery<BookComment> query = em.createQuery("select s from BookComment s " +
+                "join fetch s.book", BookComment.class);
 
         return query.getResultList();
     }
@@ -43,6 +40,15 @@ public class BookCommentRepositoryJpa implements BookCommentRepository {
         Query query = em.createQuery("delete " +
                 "from BookComment s " +
                 "where s.id = :id");
+        query.setParameter("id", id);
+        query.executeUpdate();
+    }
+
+    @Override
+    public void deleteByBookId(long id) {
+        Query query = em.createQuery("delete " +
+                "from BookComment s " +
+                "where s.book_id = :id");
         query.setParameter("id", id);
         query.executeUpdate();
     }

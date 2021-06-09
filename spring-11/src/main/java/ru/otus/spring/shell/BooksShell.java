@@ -60,5 +60,13 @@ public class BooksShell {
         return bookCommentService.getAll();
     }
 
+    @ShellMethod(value = "Add comment -book_id -comment", key = "addComment")
+    public String addBookComment(
+            @ShellOption(value = "-book_id") long book_id,
+            @ShellOption(value = "-comment") String coment
+    ) {
+        return "Comment added id=" + bookCommentService.insert(book_id, coment);
+    }
+
 }
 

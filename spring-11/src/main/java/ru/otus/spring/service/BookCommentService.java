@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface BookCommentService {
     List<BookComment> getAll();
+    long insert(long book_id, String comment);
 }

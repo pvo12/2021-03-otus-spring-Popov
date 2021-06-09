@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.domain.Book;
+import ru.otus.spring.repositories.BookCommentRepository;
 import ru.otus.spring.repositories.BookRepository;
 
 import java.util.List;
@@ -16,10 +17,12 @@ public class BookServiceImpl implements BookService {
     private final BookRepository repository;
     private final GenreService genreService;
     private final AuthorService authorService;
+    private final BookCommentRepository bookCommentRepository;
 
     @Override
     @Transactional
     public void delete(long id) {
+        bookCommentRepository.deleteByBookId(id);
         repository.deleteById(id);
     }
 
