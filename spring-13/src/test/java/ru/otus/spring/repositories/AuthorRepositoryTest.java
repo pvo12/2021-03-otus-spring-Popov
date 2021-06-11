@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 import ru.otus.spring.domain.Author;
 
 import java.util.List;
@@ -15,12 +14,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Репозиторий для работы с авторами ")
 @DataJpaTest
-@Import(AuthorRepositoryJpa.class)
-class AuthorRepositoryJpaTest {
+class AuthorRepositoryTest {
     private static final String EXISTING_AUTHOR_FIO = "author1";
     private static final Long EXISTING_AUTHOR_ID = 1L;
     @Autowired
-    private AuthorRepositoryJpa repositoryJpa;
+    private AuthorRepository repository;
     @Autowired
     private TestEntityManager em;
 
@@ -28,7 +26,7 @@ class AuthorRepositoryJpaTest {
     @Test
     void shouldSave() {
         Author author = new Author(0, "author2");
-        Author expectedAuthor = repositoryJpa.save(author);
+        Author expectedAuthor = repository.save(author);
         assertThat(expectedAuthor).usingRecursiveComparison().isEqualTo(author);
         assertThat(expectedAuthor.getId()).isGreaterThan(0);
 
@@ -40,7 +38,7 @@ class AuthorRepositoryJpaTest {
     @Test
     void shouldFindByFio() {
         val existingAuthor = em.find(Author.class, EXISTING_AUTHOR_ID);
-        List<Author> authors = repositoryJpa.findByFio(EXISTING_AUTHOR_FIO);
+        List<Author> authors = repository.findByFio(EXISTING_AUTHOR_FIO);
         assertThat(authors).containsOnlyOnce(existingAuthor);
     }
 }

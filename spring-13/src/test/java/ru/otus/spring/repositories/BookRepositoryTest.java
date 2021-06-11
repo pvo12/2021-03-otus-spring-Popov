@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 import ru.otus.spring.domain.Author;
 import ru.otus.spring.domain.Book;
 import ru.otus.spring.domain.Genre;
@@ -14,16 +13,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Репозиторий для работы с книгами должен")
 @DataJpaTest
-@Import(BookRepositoryJpa.class)
-class BookRepositoryJpaTest {
-    private static final int EXISTING_BOOK_ID = 1;
-    private static final int EXISTING_AUTHOR_ID = 1;
-    private static final int EXISTING_GENRE_ID = 1;
+class BookRepositoryTest {
+    private static final Long EXISTING_BOOK_ID = 1L;
+    private static final Long EXISTING_AUTHOR_ID = 1L;
+    private static final Long EXISTING_GENRE_ID = 1L;
     private static final String EXISTING_BOOK_TITLE = "book1";
     private static final Author EXISTING_AUTHOR = new Author(EXISTING_AUTHOR_ID, "author1");
     private static final Genre EXISTING_GENRE = new Genre(EXISTING_GENRE_ID, "genre1");
     @Autowired
-    private BookRepositoryJpa repositoryJpa;
+    private BookRepository repository;
 
     @Autowired
     private TestEntityManager em;
@@ -32,7 +30,7 @@ class BookRepositoryJpaTest {
     @Test
     void shouldInsertBook() {
         Book expectedBook = new Book(0, EXISTING_AUTHOR, EXISTING_GENRE, "book2");
-        repositoryJpa.save(expectedBook);
+        repository.save(expectedBook);
         assertThat(expectedBook.getId()).isGreaterThan(0);
 
         Book actualBook = em.find(Book.class, expectedBook.getId());
@@ -44,7 +42,7 @@ class BookRepositoryJpaTest {
     @Test
     void shouldReturnExpectedBookById() {
         Book expectedBook = new Book(EXISTING_BOOK_ID, EXISTING_AUTHOR, EXISTING_GENRE, EXISTING_BOOK_TITLE);
-        Book actualBook = repositoryJpa.findById(EXISTING_BOOK_ID).orElseThrow();
+        Book actualBook = repository.findById(EXISTING_BOOK_ID).orElseThrow();
         assertThat(actualBook).usingRecursiveComparison().isEqualTo(expectedBook);
     }
 
@@ -52,11 +50,11 @@ class BookRepositoryJpaTest {
     @Test
     void shouldCorrectDeleteBookById() {
 
-        assertThat(repositoryJpa.findById(EXISTING_BOOK_ID).isPresent());
+        assertThat(repository.findById(EXISTING_BOOK_ID).isPresent());
 
-        repositoryJpa.deleteById(EXISTING_BOOK_ID);
+        repository.deleteById(EXISTING_BOOK_ID);
 
-        assertThat(repositoryJpa.findById(EXISTING_BOOK_ID).isEmpty());
+        assertThat(repository.findById(EXISTING_BOOK_ID).isEmpty());
     }
 
     @DisplayName("возвращать ожидаемый список книг")
@@ -64,7 +62,7 @@ class BookRepositoryJpaTest {
     void shouldReturnExpectedBooksList() {
         Book expectedBook = new Book(EXISTING_BOOK_ID, EXISTING_AUTHOR, EXISTING_GENRE, EXISTING_BOOK_TITLE);
         Book expectedBook2 = new Book(2, EXISTING_AUTHOR, EXISTING_GENRE, "book2");
-        var actualBookList = repositoryJpa.findAll();
+        var actualBookList = repository.findAll();
         assertThat(actualBookList)
                 .usingFieldByFieldElementComparator()
                 .containsExactlyInAnyOrder(expectedBook, expectedBook2);
@@ -74,7 +72,7 @@ class BookRepositoryJpaTest {
     @Test
     void shouldReturnExpectedBooksListByExample() {
         Book expectedBook = new Book(EXISTING_BOOK_ID, EXISTING_AUTHOR, EXISTING_GENRE, EXISTING_BOOK_TITLE);
-        var actualBookList = repositoryJpa.findByExample(expectedBook);
+        var actualBookList = repository.findByExample(expectedBook);
         assertThat(actualBookList)
                 .usingFieldByFieldElementComparator()
                 .containsExactlyInAnyOrder(expectedBook);

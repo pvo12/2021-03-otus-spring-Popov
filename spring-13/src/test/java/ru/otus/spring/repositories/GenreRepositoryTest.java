@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
-import org.springframework.context.annotation.Import;
 import ru.otus.spring.domain.Genre;
 
 import java.util.List;
@@ -15,12 +14,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Репозиторий для работы с жанрами ")
 @DataJpaTest
-@Import(GenreRepositoryJpa.class)
-class GenreRepositoryJpaTest {
+class GenreRepositoryTest {
     private static final String EXISTING_GENRE_NAME = "genre1";
     private static final Long EXISTING_GENRE_ID = 1L;
     @Autowired
-    private GenreRepositoryJpa repositoryJpa;
+    private GenreRepository repository;
 
     @Autowired
     private TestEntityManager em;
@@ -29,7 +27,7 @@ class GenreRepositoryJpaTest {
     @Test
     void shouldSave() {
         Genre genre = new Genre(0, "author2");
-        Genre expectedGenre = repositoryJpa.save(genre);
+        Genre expectedGenre = repository.save(genre);
         assertThat(expectedGenre).usingRecursiveComparison().isEqualTo(genre);
         assertThat(expectedGenre.getId()).isGreaterThan(0);
 
@@ -41,7 +39,7 @@ class GenreRepositoryJpaTest {
     @Test
     void shouldFindByName() {
         val existingGenre = em.find(Genre.class, EXISTING_GENRE_ID);
-        List<Genre> genres = repositoryJpa.findByName(EXISTING_GENRE_NAME);
+        List<Genre> genres = repository.findByName(EXISTING_GENRE_NAME);
         assertThat(genres).containsOnlyOnce(existingGenre);
     }
 }

@@ -8,7 +8,7 @@ import javax.persistence.PersistenceContext;
 import java.util.Optional;
 
 @Repository
-public class BookViewRepositoryJpa implements BookViewRepository {
+public class BookBriefRepositoryJpa implements BookBriefRepository {
     @PersistenceContext
     private EntityManager em;
 

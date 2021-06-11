@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.domain.BookComment;
+import ru.otus.spring.repositories.BookBriefRepository;
 import ru.otus.spring.repositories.BookCommentRepository;
-import ru.otus.spring.repositories.BookViewRepository;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookCommentServiceImpl implements BookCommentService {
     private final BookCommentRepository repository;
-    private final BookViewRepository bookViewRepository;
+    private final BookBriefRepository bookBriefRepository;
 
     @Override
     @Transactional(readOnly = true)
@@ -24,7 +24,7 @@ public class BookCommentServiceImpl implements BookCommentService {
     @Override
     @Transactional
     public long insert(long book_id, String comment) {
-        var book = bookViewRepository.findById(book_id).orElseThrow();
+        var book = bookBriefRepository.findById(book_id).orElseThrow();
         var bookComment = new BookComment(0, book, comment);
         return repository.save(bookComment).getId();
     }
