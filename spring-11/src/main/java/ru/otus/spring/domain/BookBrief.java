@@ -11,7 +11,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "books")
-public class BookView {
+public class BookBrief {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

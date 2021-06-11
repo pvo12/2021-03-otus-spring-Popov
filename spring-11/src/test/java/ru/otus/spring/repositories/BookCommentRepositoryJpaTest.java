@@ -17,7 +17,7 @@ class BookCommentRepositoryJpaTest {
     private static final int EXISTING_BOOK_ID = 2;
     private static final int EXISTING_BOOK_COMMENT_ID = 1;
     private static final String EXISTING_BOOK_TITLE = "book2";
-    private static final BookView EXISTING_BOOK = new BookView(EXISTING_BOOK_ID, EXISTING_BOOK_TITLE);
+    private static final BookBrief EXISTING_BOOK = new BookBrief(EXISTING_BOOK_ID, EXISTING_BOOK_TITLE);
     private static final BookComment EXISTING_BOOK_COMMENT = new BookComment(EXISTING_BOOK_COMMENT_ID, EXISTING_BOOK, "comment1");
 
     @Autowired

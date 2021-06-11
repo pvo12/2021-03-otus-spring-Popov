@@ -1,7 +1,7 @@
 package ru.otus.spring.repositories;
 
 import org.springframework.stereotype.Repository;
-import ru.otus.spring.domain.BookView;
+import ru.otus.spring.domain.BookBrief;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -13,7 +13,7 @@ public class BookViewRepositoryJpa implements BookViewRepository {
     private EntityManager em;
 
     @Override
-    public Optional<BookView> findById(long id) {
-        return Optional.ofNullable(em.find(BookView.class, id));
+    public Optional<BookBrief> findById(long id) {
+        return Optional.ofNullable(em.find(BookBrief.class, id));
     }
 }

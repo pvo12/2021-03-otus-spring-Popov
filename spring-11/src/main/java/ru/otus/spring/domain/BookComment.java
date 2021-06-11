@@ -20,7 +20,7 @@ public class BookComment {
 
     @ManyToOne
     @JoinColumn(name = "book_id")
-    private BookView book;
+    private BookBrief book;
 
     @Column(name = "comment", nullable = false, unique = false)
     private String comment;
