@@ -4,6 +4,6 @@ import ru.otus.spring.domain.BookBrief;
 
 import java.util.Optional;
 
-public interface BookViewRepository {
+public interface BookBriefRepository {
     Optional<BookBrief> findById(long id);
 }
