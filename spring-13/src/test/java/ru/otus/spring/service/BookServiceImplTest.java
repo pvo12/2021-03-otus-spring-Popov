@@ -8,6 +8,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Example;
 import ru.otus.spring.domain.Author;
 import ru.otus.spring.domain.Book;
 import ru.otus.spring.domain.Genre;
@@ -79,9 +80,9 @@ class BookServiceImplTest {
         given(authorService.findOrCreateByFio(EXISTING_AUTHOR_FIO)).willReturn(EXISTING_AUTHOR);
 
         Book book = new Book(EXISTING_AUTHOR, EXISTING_GENRE, EXPECTING_BOOK_TITLE);
-        Book expectedBook = new Book(2, EXISTING_AUTHOR, EXISTING_GENRE, EXPECTING_BOOK_TITLE);
+        Book expectedBook = new Book(2L, EXISTING_AUTHOR, EXISTING_GENRE, EXPECTING_BOOK_TITLE);
 
-        given(bookRepository.findByExample(book)).willReturn(List.of());
+        given(bookRepository.findAll(Example.of(book))).willReturn(List.of());
         given(bookRepository.save(book)).willReturn(expectedBook);
 
         var id = bookService.insert(EXPECTING_BOOK_TITLE, EXISTING_AUTHOR_FIO, EXISTING_GENRE_NAME);
@@ -123,7 +124,7 @@ class BookServiceImplTest {
         Book book1 = new Book(EXISTING_AUTHOR, EXISTING_GENRE, EXISTING_BOOK_TITLE);
         Book book2 = new Book(EXISTING_AUTHOR, EXISTING_GENRE, EXISTING_BOOK_TITLE);
         book2.setId(EXISTING_BOOK_ID);
-        given(bookRepository.findByExample(book1)).willReturn(List.of(book2));
+        given(bookRepository.findAll(Example.of(book1))).willReturn(List.of(book2));
 
         var id = bookService.insert(EXISTING_BOOK_TITLE, EXISTING_AUTHOR_FIO, EXISTING_GENRE_NAME);
         assertThat(id).isEqualTo(EXISTING_BOOK_ID);

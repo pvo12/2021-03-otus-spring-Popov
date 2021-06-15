@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.data.domain.Example;
 import ru.otus.spring.domain.Author;
 import ru.otus.spring.domain.Book;
 import ru.otus.spring.domain.Genre;
@@ -29,7 +30,7 @@ class BookRepositoryTest {
     @DisplayName("добавлять книгу в БД")
     @Test
     void shouldInsertBook() {
-        Book expectedBook = new Book(0, EXISTING_AUTHOR, EXISTING_GENRE, "book2");
+        Book expectedBook = new Book(EXISTING_AUTHOR, EXISTING_GENRE, "book2");
         repository.save(expectedBook);
         assertThat(expectedBook.getId()).isGreaterThan(0);
 
@@ -61,7 +62,7 @@ class BookRepositoryTest {
     @Test
     void shouldReturnExpectedBooksList() {
         Book expectedBook = new Book(EXISTING_BOOK_ID, EXISTING_AUTHOR, EXISTING_GENRE, EXISTING_BOOK_TITLE);
-        Book expectedBook2 = new Book(2, EXISTING_AUTHOR, EXISTING_GENRE, "book2");
+        Book expectedBook2 = new Book(2L, EXISTING_AUTHOR, EXISTING_GENRE, "book2");
         var actualBookList = repository.findAll();
         assertThat(actualBookList)
                 .usingFieldByFieldElementComparator()
@@ -72,7 +73,7 @@ class BookRepositoryTest {
     @Test
     void shouldReturnExpectedBooksListByExample() {
         Book expectedBook = new Book(EXISTING_BOOK_ID, EXISTING_AUTHOR, EXISTING_GENRE, EXISTING_BOOK_TITLE);
-        var actualBookList = repository.findByExample(expectedBook);
+        var actualBookList = repository.findAll(Example.of(expectedBook));
         assertThat(actualBookList)
                 .usingFieldByFieldElementComparator()
                 .containsExactlyInAnyOrder(expectedBook);

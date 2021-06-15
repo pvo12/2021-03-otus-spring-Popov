@@ -1,6 +1,7 @@
 package ru.otus.spring.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.spring.domain.Book;
@@ -47,7 +48,7 @@ public class BookServiceImpl implements BookService {
         var author = authorService.findOrCreateByFio(authorFio);
 
         var book = new Book(author, genre, bookTitle);
-        var books = repository.findByExample(book);
+        var books = repository.findAll(Example.of(book));
         if (books.size() == 0) {
             return repository.save(book).getId();
         } else {
