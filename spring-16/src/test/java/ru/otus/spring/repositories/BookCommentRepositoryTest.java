@@ -13,11 +13,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("Репозиторий для работы с комментариями книг ")
 @DataJpaTest
 class BookCommentRepositoryTest {
-    private static final Long EXISTING_BOOK_ID = 2L;
+    private static final Long EXISTING_BOOK_ID = 1L;
+    private static final Long EXISTING_BOOK_ID2 = 2L;
     private static final Long EXISTING_BOOK_COMMENT_ID = 1L;
+    private static final Long EXISTING_BOOK_COMMENT_ID2 = 2L;
     private static final String EXISTING_BOOK_TITLE = "book2";
-    private static final BookBrief EXISTING_BOOK = new BookBrief(EXISTING_BOOK_ID, EXISTING_BOOK_TITLE);
-    private static final BookComment EXISTING_BOOK_COMMENT = new BookComment(EXISTING_BOOK_COMMENT_ID, EXISTING_BOOK, "comment1");
+    private static final BookBrief EXISTING_BOOK = new BookBrief(EXISTING_BOOK_ID, "book1");
+    private static final BookBrief EXISTING_BOOK2 = new BookBrief(EXISTING_BOOK_ID2, EXISTING_BOOK_TITLE);
+    private static final BookComment EXISTING_BOOK_COMMENT = new BookComment(EXISTING_BOOK_COMMENT_ID, EXISTING_BOOK2, "comment1");
+    private static final BookComment EXISTING_BOOK_COMMENT2 = new BookComment(EXISTING_BOOK_COMMENT_ID2, EXISTING_BOOK2, "comment2");
+    private static final BookComment EXISTING_BOOK_COMMENT3 = new BookComment(3L, EXISTING_BOOK, "comment3");
 
     @Autowired
     private BookCommentRepository repository;
@@ -27,7 +32,7 @@ class BookCommentRepositoryTest {
     @Test
     @DisplayName("должен добавлять комментарий в БД")
     void shouldSave() {
-        BookComment bookComment = new BookComment(0, EXISTING_BOOK, "comment");
+        BookComment bookComment = new BookComment(0, EXISTING_BOOK2, "comment");
         BookComment expectedBookComment = repository.save(bookComment);
         assertThat(expectedBookComment).usingRecursiveComparison().isEqualTo(bookComment);
         assertThat(expectedBookComment.getId()).isGreaterThan(0);
@@ -49,7 +54,7 @@ class BookCommentRepositoryTest {
         var actualBookCommentList = repository.findAll();
         assertThat(actualBookCommentList)
                 .usingFieldByFieldElementComparator()
-                .containsExactlyInAnyOrder(EXISTING_BOOK_COMMENT);
+                .containsExactlyInAnyOrder(EXISTING_BOOK_COMMENT, EXISTING_BOOK_COMMENT2, EXISTING_BOOK_COMMENT3);
     }
 
     @Test

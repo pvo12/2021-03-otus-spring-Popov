@@ -10,5 +10,5 @@ public interface BookCommentRepository extends JpaRepository<BookComment, Long> 
     void deleteByBookId(Long id);
 
     @EntityGraph(attributePaths = "book")
-    List<BookComment> findAll();
+    List<BookComment> findAllByBookId(Long bookId);
 }

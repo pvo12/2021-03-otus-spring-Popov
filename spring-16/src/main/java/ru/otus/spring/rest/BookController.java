@@ -29,26 +29,26 @@ public class BookController {
     }
 
     @GetMapping("/book/{id}/comment")
-    public List<BookCommentDto> getAllComments() {
-        return bookCommentService.getAll().stream()
+    public List<BookCommentDto> getAllBookComments(@PathVariable("id") long id) {
+        return bookCommentService.getAllCommentsByBookID(id).stream()
                 .map(BookCommentDto::toDto)
                 .collect(Collectors.toList());
     }
 
     @PostMapping("/book")
-    public BookDto create(@RequestBody BookDto book) {
+    public BookDto createBook(@RequestBody BookDto book) {
         book.setId(service.insert(book.getTitle(), book.getAuthor(), book.getGenre()));
         return book;
     }
 
-    @PutMapping("/book")
-    public BookDto editBook(@RequestBody BookDto book) {
-        service.update(book.getId(), book.getTitle(), book.getAuthor(), book.getGenre());
+    @PutMapping("/book/{id}")
+    public BookDto editBook(@PathVariable("id") long id, @RequestBody BookDto book) {
+        service.update(id, book.getTitle(), book.getAuthor(), book.getGenre());
         return book;
     }
 
     @DeleteMapping("/book/{id}")
-    public void deleteById(@PathVariable("id") long id) {
+    public void deleteBookById(@PathVariable("id") long id) {
         service.delete(id);
     }
 
