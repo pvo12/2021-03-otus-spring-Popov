@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,7 +24,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
-@DisplayName(value = "Контроллер книг долежн")
+@DisplayName(value = "Контроллер книг должен")
+@WithMockUser(
+        username = "admin",
+        authorities = {"ROLE_ADMIN"}
+)
 class BookControllerTest {
     public static final String ERROR_STRING = "Book not found";
     @Autowired
@@ -49,7 +54,7 @@ class BookControllerTest {
         List<BookDto> expectedResult = books.stream()
                 .map(BookDto::toDto).collect(Collectors.toList());
 
-        mvc.perform(get("/book"))
+        mvc.perform(get("/api/book"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(expectedResult)));
     }
@@ -61,7 +66,7 @@ class BookControllerTest {
                 new BookCommentDto(1L, "book2", "comment1"),
                 new BookCommentDto(2L, "book2", "comment2"));
 
-        mvc.perform(get("/book/2/comment"))
+        mvc.perform(get("/api/book/2/comment"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(expectedResult)));
     }
@@ -71,7 +76,7 @@ class BookControllerTest {
     void shouldReturnCorrectPersonById() throws Exception {
         BookDto expectedResult = BookDto.toDto(EXISTING_BOOK);
 
-        mvc.perform(get("/book/1"))
+        mvc.perform(get("/api/book/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(expectedResult)));
     }
@@ -79,7 +84,7 @@ class BookControllerTest {
     @Test
     @DisplayName("возвращать ожидаемую ошибку когда книга не найдена")
     void shouldReturnExpectedErrorWhenBookNotFound() throws Exception {
-        mvc.perform(get("/book/3"))
+        mvc.perform(get("/api/book/3"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(ERROR_STRING));
     }
@@ -88,12 +93,12 @@ class BookControllerTest {
     @DisplayName("добавлять книгу")
     void shouldAddBook() throws Exception {
         BookDto bookDto = new BookDto(3L, "author", "genre", "title3");
-        mvc.perform(post("/book")
+        mvc.perform(post("/api/book")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(bookDto)))
                 .andExpect(status().isOk());
 
-        mvc.perform(get("/book/3"))
+        mvc.perform(get("/api/book/3"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(bookDto)));
     }
@@ -101,14 +106,14 @@ class BookControllerTest {
     @Test
     @DisplayName("удалять книгу по id")
     void shouldDeleteBookById() throws Exception {
-        mvc.perform(get("/book/1"))
+        mvc.perform(get("/api/book/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(BookDto.toDto(EXISTING_BOOK))));
 
-        mvc.perform(delete("/book/1"))
+        mvc.perform(delete("/api/book/1"))
                 .andExpect(status().isOk());
 
-        mvc.perform(get("/book/1"))
+        mvc.perform(get("/api/book/1"))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(ERROR_STRING));
     }
@@ -119,12 +124,12 @@ class BookControllerTest {
         BookDto bookDto = BookDto.toDto(EXISTING_BOOK);
         bookDto.setAuthor("author2");
 
-        mvc.perform(put("/book/1")
+        mvc.perform(put("/api/book/1")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(bookDto)))
                 .andExpect(status().isOk());
 
-        mvc.perform(get("/book/1"))
+        mvc.perform(get("/api/book/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().json(mapper.writeValueAsString(bookDto)));
     }
