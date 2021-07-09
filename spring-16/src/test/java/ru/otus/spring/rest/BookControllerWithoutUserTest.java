@@ -37,18 +37,18 @@ class BookControllerWithoutUserTest {
         );
     }
 
-    @DisplayName("возвращать ошибку 3xx")
+    @DisplayName("возвращать ошибку Unauthorized")
     @ParameterizedTest
     @MethodSource("addFixture")
     void shouldReturnCorrectBooksList(String method, String url) throws Exception {
         if (method.equals(GET)) {
-            mvc.perform(get(url)).andExpect(status().is3xxRedirection());
+            mvc.perform(get(url)).andExpect(status().isUnauthorized());
         } else if (method.equals(POST)) {
-            mvc.perform(post(url)).andExpect(status().is3xxRedirection());
+            mvc.perform(post(url)).andExpect(status().isUnauthorized());
         } else if (method.equals(PUT)) {
-            mvc.perform(put(url)).andExpect(status().is3xxRedirection());
+            mvc.perform(put(url)).andExpect(status().isUnauthorized());
         } else if (method.equals(DELETE)) {
-            mvc.perform(delete(url)).andExpect(status().is3xxRedirection());
+            mvc.perform(delete(url)).andExpect(status().isUnauthorized());
         }
     }
 }
