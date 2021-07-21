@@ -4,26 +4,16 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-import ru.otus.spring.config.JwtConfiguration;
 import ru.otus.spring.domain.Author;
 import ru.otus.spring.domain.Book;
 import ru.otus.spring.domain.Genre;
-import ru.otus.spring.service.TokenServiceImpl;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,22 +34,6 @@ class BookControllerTest {
     @Autowired
     private ObjectMapper mapper;
 
-    @Mock
-    Authentication authentication;
-
-    @Spy
-    @Autowired
-    JwtConfiguration jwtConfiguration;
-
-    @InjectMocks
-    private TokenServiceImpl tokenService;
-
-/*    @Value("${jwt.public.key}")
-    private RSAPublicKey publicKey;
-
-    @Value("${jwt.private.key}")
-    private RSAPrivateKey privateKey;*/
-
     private static final Long EXISTING_BOOK_ID = 1L;
     private static final Long EXISTING_AUTHOR_ID = 1L;
     private static final Long EXISTING_GENRE_ID = 1L;
@@ -70,14 +44,12 @@ class BookControllerTest {
     private static final Book EXISTING_BOOK = new Book(EXISTING_BOOK_ID, EXISTING_AUTHOR, EXISTING_GENRE, EXISTING_BOOK_TITLE);
 
     @BeforeEach
-    void setUp() {
-        SimpleGrantedAuthority authority = new SimpleGrantedAuthority("User");
-        Collection authorities = Arrays.asList(authority);
-        Mockito.when(authentication.getAuthorities()).thenReturn(authorities);
-        Mockito.when(authentication.getName()).thenReturn("user");
-/*        Mockito.when(jwtConfiguration.getPrivateKey()).thenReturn(privateKey);
-        Mockito.when(jwtConfiguration.getPublicKey()).thenReturn(publicKey);*/
-        token = tokenService.token(authentication);
+    void setUp() throws Exception {
+        var result = mvc.perform(post("/token")
+                .header("Authorization", "Basic dXNlcjpwYXNz"))
+                .andExpect(status().isOk())
+                .andReturn();
+        token = result.getResponse().getContentAsString();
     }
 
     @Test
