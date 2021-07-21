@@ -15,5 +15,15 @@ Spring Framework для Diasoft
   /spring-04
 9. DAO на Spring JDBC
   /spring-09
-11. 11. JPQL, Spring ORM, DAO на основе Spring ORM + JPA 
+11. JPQL, Spring ORM, DAO на основе Spring ORM + JPA 
   /spring-11
+13. "Белая магия" Spring Data: Spring Data JPA 
+  /spring-13
+16. Современные приложения на Spring MVC
+  /spring-16
+19. Spring Security: Механизмы аутентификации 
+  /spring-16
+20. Spring Security: Авторизация
+  /spring-16
+23. Spring Integration: Endpoints и Flow Components 
+  /spring-23
