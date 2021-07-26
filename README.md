@@ -25,3 +25,5 @@ Spring Framework для Diasoft
   /spring-16
 20. Spring Security: Авторизация
   /spring-16
+23. Spring Integration: Endpoints и Flow Components 
+  /spring-23
