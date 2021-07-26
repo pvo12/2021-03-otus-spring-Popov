@@ -9,3 +9,7 @@ spring:
       ddl-auto: none
 
     show-sql: true
+
+jwt:
+  privateKey: classpath:app.key
+  publicKey: classpath:app.pub

@@ -17,3 +17,7 @@ spring:
       ddl-auto: validate
 
     show-sql: true
+
+jwt:
+  privateKey: classpath:app.key
+  publicKey: classpath:app.pub
