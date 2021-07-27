@@ -33,7 +33,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/token").permitAll()
+                .antMatchers("/token", "/actuator/**").permitAll()
                 .antMatchers("/**").hasAuthority("SCOPE_User")
                 .and()
                 .httpBasic(Customizer.withDefaults())
