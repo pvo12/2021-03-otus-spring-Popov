@@ -27,3 +27,5 @@ Spring Framework для Diasoft
   /spring-16
 23. Spring Integration: Endpoints и Flow Components 
   /spring-23
+24. Монолиты vs. Microservices (Round 2), Spring Boot Actuator
+  /spring-16
