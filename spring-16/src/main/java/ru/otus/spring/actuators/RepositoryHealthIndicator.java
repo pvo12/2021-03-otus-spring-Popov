@@ -6,9 +6,6 @@ import org.springframework.boot.actuate.health.HealthIndicator;
 import org.springframework.boot.actuate.health.Status;
 import org.springframework.stereotype.Component;
 import ru.otus.spring.repositories.BookRepository;
-import ru.otus.spring.service.BookService;
-
-import java.util.Random;
 
 @Component
 @RequiredArgsConstructor

@@ -1,7 +1,7 @@
 package ru.otus.spring.service;
 
-import org.springframework.web.client.RestTemplate;
+import org.springframework.http.ResponseEntity;
 
 public interface RestService {
-    RestTemplate getAuthorizedTemplate();
+    <T> ResponseEntity<T> getForEntity(String url, Class<T> responseType);
 }

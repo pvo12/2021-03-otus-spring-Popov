@@ -45,9 +45,7 @@ class BookControllerTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        var result = mvc.perform(post("/token")
-                .header("Authorization", "Basic dXNlcjpwYXNz"))
-                .andExpect(status().isOk())
+        var result = mvc.perform(post("/token?username=user&password=pass"))
                 .andReturn();
         token = result.getResponse().getContentAsString();
     }

@@ -1,9 +1,8 @@
 package ru.otus.spring.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import ru.otus.spring.config.RestTemplateConfig;
+import ru.otus.spring.config.RestTemplatePropertiesConfig;
 import ru.otus.spring.domain.Book;
 
 import java.util.Arrays;
@@ -13,11 +12,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class BookServiceImpl implements BookService {
     private final RestService service;
-    private final RestTemplateConfig config;
+    private final RestTemplatePropertiesConfig config;
 
-    @Cacheable("books")
     @Override
     public List<Book> getAll() {
-        return Arrays.asList(service.getAuthorizedTemplate().getForEntity(config.getGetBookUrl(), Book[].class).getBody());
+        return Arrays.asList(service.getForEntity(config.getGetBookUrl(), Book[].class).getBody());
+    }
+
+    @Override
+    public Book getById(long id) {
+        return service.getForEntity(config.getGetBookUrl() + id, Book.class).getBody();
     }
 }

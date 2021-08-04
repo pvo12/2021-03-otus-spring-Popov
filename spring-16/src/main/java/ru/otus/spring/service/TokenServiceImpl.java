@@ -7,7 +7,9 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.otus.spring.config.JwtConfiguration;
 
@@ -22,17 +24,21 @@ public class TokenServiceImpl implements TokenService{
     private final UserDetailsService userDetailsService;
 
     @Override
-    public String getToken(String login) {
+    public String getToken(String username, String password) {
         Instant now = Instant.now();
-        long expiry = 36000L;
-        String scope = userDetailsService.loadUserByUsername(login).getAuthorities().stream()
+        long expiry = 60L;
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        if (!password.equals(userDetails.getPassword())) {
+            throw new UsernameNotFoundException(username);
+        }
+        String scope = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(" "));
         JWTClaimsSet claims = new JWTClaimsSet.Builder()
                 .issuer("self")
                 .issueTime(new Date(now.toEpochMilli()))
                 .expirationTime(new Date(now.plusSeconds(expiry).toEpochMilli()))
-                .subject(login)
+                .subject(username)
                 .claim("scope", scope)
                 .build();
         JWSHeader header = new JWSHeader.Builder(JWSAlgorithm.RS256).build();

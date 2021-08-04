@@ -32,11 +32,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/login", "/actuator/**").permitAll()
+                .antMatchers("/token", "/actuator/**").permitAll()
                 .antMatchers("/**").hasAuthority("SCOPE_User")
-                .and()
-                .formLogin()
-                .successHandler(new AppAuthenticationSuccessHandler())
                 .and()
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
