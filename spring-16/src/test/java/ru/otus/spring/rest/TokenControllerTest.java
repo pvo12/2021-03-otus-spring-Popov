@@ -18,16 +18,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Transactional
 @DisplayName(value = "Контроллер токенов должен")
 class TokenControllerTest {
-    private static final String CREDENTIALS = "dXNlcjpwYXNz";
-
     @Autowired
     private MockMvc mvc;
 
     @Test
     @DisplayName("возвращать действующий токен")
     void shouldGetValidToken() throws Exception {
-        var result = mvc.perform(post("/token")
-                .header("Authorization", "Basic dXNlcjpwYXNz"))
+        var result = mvc.perform(post("/token?username=user&password=pass"))
                 .andExpect(status().isOk())
                 .andReturn();
         var token = result.getResponse().getContentAsString();
@@ -39,10 +36,11 @@ class TokenControllerTest {
     }
 
     @Test
-    @DisplayName("выдавать ошибку Unauthorized")
+    @DisplayName("выдавать ошибку 401")
     void shouldUnauthorized() throws Exception {
-        var result = mvc.perform(post("/token")
-                .header("Authorization", "Basic dXNlcjpwYXNzMQ=="))
-                .andExpect(status().isUnauthorized());
+        mvc.perform(post("/token?username=user&password=pass1"))
+                .andExpect(status().is4xxClientError());
+        mvc.perform(post("/token?username=user1&password=pass"))
+                .andExpect(status().is4xxClientError());
     }
 }
