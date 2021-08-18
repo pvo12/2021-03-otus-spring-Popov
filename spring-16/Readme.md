@@ -4,3 +4,4 @@ Spring Security: Авторизация
 
 24. Монолиты vs. Microservices (Round 2), Spring Boot Actuator - must have в микросервисах
 Использовать метрики, healthchecks и logfile
+26. Docker, оркестрация, облака, облачные хостинги
