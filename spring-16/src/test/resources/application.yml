@@ -9,6 +9,13 @@ spring:
       ddl-auto: none
 
     show-sql: true
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: "library"
+
+library:
+  kafka-topic-add-book-name: add-book
 
 jwt:
   privateKey: classpath:app.key

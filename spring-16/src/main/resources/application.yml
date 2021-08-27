@@ -35,7 +35,13 @@ spring:
       ddl-auto: validate
 
     show-sql: true
-
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: "library"
 jwt:
   privateKey: classpath:app.key
   publicKey: classpath:app.pub
+
+library:
+  kafka-topic-add-book-name: add-book

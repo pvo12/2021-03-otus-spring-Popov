@@ -5,3 +5,10 @@ rest-template:
   tokenUrl: http://localhost:8081/token
   login: user
   password: pass
+
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+
+library:
+  kafka-topic-add-book-name: add-book

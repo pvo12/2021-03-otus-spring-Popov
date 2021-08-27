@@ -26,5 +26,14 @@ public class BooksShell {
         return service.getById(id);
     }
 
+    @ShellMethod(value = "Add book -title -author -genre", key = "add")
+    public void addBook(
+        @ShellOption(value = "-title") String title,
+        @ShellOption(value = "-author") String author,
+        @ShellOption(value = "-genre") String genre
+    ) {
+        service.add(title, author, genre);
+    }
+
 }
 
