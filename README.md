@@ -29,3 +29,7 @@ Spring Framework для Diasoft
   /spring-23
 24. Монолиты vs. Microservices (Round 2), Spring Boot Actuator
   /spring-16
+25. REST-клиенты, SOAP, Spring WebServices и клиенты к ним
+  /spring-25
+26. Docker, оркестрация, облака, облачные хостинги
+  /spring-16
