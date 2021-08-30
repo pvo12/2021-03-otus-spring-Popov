@@ -33,3 +33,5 @@ Spring Framework для Diasoft
   /spring-25
 26. Docker, оркестрация, облака, облачные хостинги
   /spring-16
+27. Messaging-системы, Kafka 
+  /spring-25, spring-16
