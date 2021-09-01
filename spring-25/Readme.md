@@ -4,3 +4,4 @@
 
 Сервис по shell команде add добавляет книгу в сервисе /spring-16 через kafka. kafka должен быть поднят отдельно на localhost:9092.
 
+Сервис по shell команде get -id запрашивает книгу у сервиса spring-25 с использованием circuitBreaker Resilience4J.
