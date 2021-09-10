@@ -25,12 +25,12 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    @CircuitBreaker(name = MAIN_SERVICE, fallbackMethod = "testFallBack")
+    @CircuitBreaker(name = MAIN_SERVICE, fallbackMethod = "getByIdFallBack")
     public Book getById(long id) {
         return service.getForEntity(config.getGetBookUrl() + id, Book.class).getBody();
     }
 
-    private Book getByIdFallBack(long id) {
+    private Book getByIdFallBack(long id, Exception e) {
         return new Book(id, "N/A", "N/A", "N/A");
     }
 

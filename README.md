@@ -35,3 +35,5 @@ Spring Framework для Diasoft
   /spring-16
 27. Messaging-системы, Kafka 
   /spring-25, spring-16
+30. Zuul, Hystrix Circuit Breaker, Sleuth, Zipkin, Hystrix Dashboard, Secure Configuration Properties 
+  /spring-25
